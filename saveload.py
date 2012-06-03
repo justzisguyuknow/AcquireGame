@@ -1,3 +1,5 @@
+import turnaction
+
 def savegame(context):	
     game = open("savedgame.py", 'w')
     now = datetime.datetime.now()
@@ -12,4 +14,4 @@ def loadgame(context):
     import savedgame
     context = savedgame.context
     
-    rungame()
+    turnaction.rungame(context)
