@@ -155,19 +155,13 @@ def trade_stock(context, p, liquid, dom): ## shareholder chooses how many shares
         print "Player "  + str(p) + ", you have " + str(context['player'][p]['stock'][liquid]) + " shares of " + liquid + " stock."
         print "There are " + str(context['stock'][dom]) + " shares of " + dom + " in the bank."
         print "How many shares of " + liquid + " would you like to trade in, at 2 to 1?"
-        trade_shares = int(raw_input("Enter an even number"))
-        if (trade_shares % 2) != 0:
-            print "Not an even number."
-            trade_shares = str(raw_input("Enter an even number"))
-        elif  trade_shares > context['player'][p]['stock'][liquid]:
-            print "You don't have that many shares."
-            trade_stock(context, p, liquid, dom)
+        
+        trade_shares = inputs.trade_stock_input(context, p, liquid, dom)
+
+        if trade_shares = 0:
+            print "Player " + str(p) + " does not trade stock."
             return
-        elif trade_shares % 2 > context['stock'][dom]:
-            print "There are only " + str(context['stock'][dom]) + " shares of " + dom + " in the bank."
-            print "The maximum number of shares you can trade in is " + str(context['stock'][dom] * 2) +"."
-            trade_stock(context, p, liquid, dom)
-            return
+
         else:
             context['player'][p]['stock'][liquid] -= trade_shares
             context['stock'][liquid] += trade_shares
@@ -177,38 +171,25 @@ def trade_stock(context, p, liquid, dom): ## shareholder chooses how many shares
             return        
     
 def buystock(context):
-    avail_stock = {}
+    
     shares_bought = 0
+
     while 1 == 1:
         print "Available purchases are:"
-        for h in constants.hotels:
-            if context['stock'][h] > 0 and infos.chainsize(context, h) > 0:
-                avail_stock[h] = context['stock'][h]
         
-        for h in avail_stock.keys():
-            print h + ": " + str(avail_stock[h]) + " shares available at $" + str(infos.price(context, h)) + " per share."
-        
-        print "Which stock would you like to buy?"
-        buy_chain = raw_input("Select from: " + str(avail_stock.keys()))
-        if buy_chain not in avail_stock.keys():
-            print "Invalid Selection"
-            continue
-        else:
-            print "You have " + str(context['player'][context['cp']]['cash']) + " dollars."
-            
-            buy_shares = int(raw_input("How many shares of " + buy_chain + " would you like to buy?"))                      
+        for h in infos.avail_stock().keys():
+            print h + ": " + str(infos.avail_stock()[h]) + " shares available at $" + str(infos.price(context, h)) + " per share."
 
-        if (shares_bought + buy_shares) > 3:
-            print "Maximum 3 shares per turn."
-            continue
-        elif (buy_shares * infos.price(context, buy_chain)) > context['player'][context['cp']]['cash']:
-            print "You don't have enough money!"
-            continue
-        else:
-            context['player'][context['cp']]['cash'] -= (buy_shares * infos.price(context, buy_chain))
-            context['player'][context['cp']]['stock'][buy_chain] += buy_shares
-            context['stock'][buy_chain] -= buy_shares
-            shares_bought += buy_shares
+        buy_chain = inputs.buystock_chain_input(context)
+
+        print "You have " + str(context['player'][context['cp']]['cash']) + " dollars."
+            
+        buy_shares = inputs.buystock_amt_input(context, buy_chain, shares_bought)
+        
+        context['player'][context['cp']]['cash'] -= (buy_shares * infos.price(context, buy_chain))
+        context['player'][context['cp']]['stock'][buy_chain] += buy_shares
+        context['stock'][buy_chain] -= buy_shares
+        shares_bought += buy_shares
 
         if shares_bought > 2:
                 return

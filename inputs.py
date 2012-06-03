@@ -13,19 +13,6 @@ def numplayers_ask(context):
             print "Bad Input"
             response = 0
 
-def buystock_ask_input(context):
-    '''Prompts for Y/N input whether current player wants to buy stock'''
-    response = 0
-    while response == 0:
-        response = raw_input("Player " + str(context['cp']) + ", Would you like to buy stock this turn? (Y/N):")
-        if response in ['Y', 'Yes', "y", 'yes']:
-            return "Y"
-        elif response in ['N', 'No', "n", 'no']:
-            return "N"
-        else:
-            print "Bad Input"
-            response = 0
-
 def tile_input(context):
     tiletoplay = 0
     while tiletoplay == 0:   
@@ -62,6 +49,49 @@ def merge_dir_input(context, contenders):
             dom = 0
         else: return dom
 
+
+def buystock_ask_input(context):
+    '''Prompts for Y/N input whether current player wants to buy stock'''
+    response = 0
+    while response == 0:
+        response = raw_input("Player " + str(context['cp']) + ", Would you like to buy stock this turn? (Y/N):")
+        if response in ['Y', 'Yes', "y", 'yes']:
+            return "Y"
+        elif response in ['N', 'No', "n", 'no']:
+            return "N"
+        else:
+            print "Bad Input"
+            response = 0
+
+def buystock_chain_input(context):
+
+    print "Which stock would you like to buy?"
+    buy_chain = -1
+
+    while buy_chain == -1:
+
+        buy_chain = raw_input("Select from: " + str(infos.avail_stock().keys()))
+        
+        if buy_chain not in infos.avail_stock().keys():
+            buy_chain = -1
+        
+        else: return buy_chain
+
+def buystock_amt_input(context, buy_chain, shares_bought):
+    buy_shares = -1
+
+    while buy_shares = -1
+        buy_shares = int(raw_input("How many shares of " + buy_chain + " would you like to buy?"))                      
+
+        if (shares_bought + buy_shares) > 3:
+            print "Maximum 3 shares per turn."
+            buy_shares = -1
+        elif (buy_shares * infos.price(context, buy_chain)) > context['player'][context['cp']]['cash']:
+            print "You don't have enough money!"
+            buy_shares = -1
+        else: return buy_shares
+            
+
 def sell_stock_ask_input(context, p, chain):
     "Tells player how many shares of the chain they have and asks if they want to sell any"
     print "Player "  + str(p) + ", you have " + str(context['player'][p]['stock'][chain]) + " shares of " + chain + " stock."
@@ -86,7 +116,25 @@ def sell_stock_shares_input(context, p, chain):
         if sell_shares > context['player'][p]['stock'][chain]:
             print "You don't have that many shares!"
             sell_shares = -1
-        else: return sell_shares          
+        else: return sell_shares     
+
+def trade_stock_input(context, p, liquid, dom):
+    
+    trade_shares = -1
+    while trade_shares == -1:
+        trade_shares = int(raw_input("Enter an even number:"))
+        
+        if trade_shares not in range(0, context['player'][p]['stock'][liquid] + 1, 2):
+            print "Bad Input: not an even positive number, or you don't have that many shares."
+            trade_shares = -1
+        
+        elif trade_shares % 2 > context['stock'][dom]:
+            print "There are only " + str(context['stock'][dom]) + " shares of " + dom + " in the bank."
+            print "The maximum number of shares you can trade in is " + str(context['stock'][dom] * 2) +"."
+            trade_shares = -1
+
+        else: return trade_shares
+            
 
 def done_input():
     ans = 0

@@ -71,6 +71,14 @@ def sole_bonus(context, name):
     '''sole shareholder merger bonus for chain name name'''
     return price(context, name)*15
 
+def avail_stock(context):
+    avail_stock = {}
+    for h in constants.hotels:
+        if context['stock'][h] > 0 and infos.chainsize(context, h) > 0:
+            avail_stock[h] = context['stock'][h]
+
+    return avail_stock
+
 def neighbors(context, x):
     '''creates a dict of a given tile's cardinal neighbors, returns fewer than 4 members if tile is on edge or corner'''
     neigh = {}
