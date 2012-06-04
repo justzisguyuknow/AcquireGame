@@ -71,9 +71,9 @@ def buystock_chain_input(context):
 
     while buy_chain == -1:
 
-        buy_chain = raw_input("Select from: " + str(infos.avail_stock().keys()))
+        buy_chain = raw_input("Select from: " + str(infos.avail_stock(context).keys()))
         
-        if buy_chain not in infos.avail_stock().keys():
+        if buy_chain not in infos.avail_stock(context).keys():
             buy_chain = -1
         
         else: return buy_chain
@@ -82,7 +82,7 @@ def buystock_amt_input(context, buy_chain, shares_bought):
     '''raw input function for buystock()'''
     buy_shares = -1
 
-    while buy_shares = -1
+    while buy_shares == -1:
         buy_shares = int(raw_input("How many shares of " + buy_chain + " would you like to buy?"))                      
 
         if (shares_bought + buy_shares) > 3:

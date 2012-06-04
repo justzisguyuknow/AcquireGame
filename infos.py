@@ -74,7 +74,7 @@ def sole_bonus(context, name):
 def avail_stock(context):
     avail_stock = {}
     for h in constants.hotels:
-        if context['stock'][h] > 0 and infos.chainsize(context, h) > 0:
+        if context['stock'][h] > 0 and chainsize(context, h) > 0:
             avail_stock[h] = context['stock'][h]
 
     return avail_stock

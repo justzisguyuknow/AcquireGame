@@ -162,7 +162,7 @@ def trade_stock(context, p, liquid, dom):
         
         trade_shares = inputs.trade_stock_input(context, p, liquid, dom)
 
-        if trade_shares = 0:
+        if trade_shares == 0:
             print "Player " + str(p) + " does not trade stock."
             return
 
@@ -179,8 +179,8 @@ def buystock(context):
     shares_bought = 0
     while 1 == 1:
         print "Available purchases are:"
-        for h in infos.avail_stock().keys():
-            print h + ": " + str(infos.avail_stock()[h]) + " shares available at $" + str(infos.price(context, h)) + " per share."
+        for h in infos.avail_stock(context).keys():
+            print h + ": " + str(infos.avail_stock(context)[h]) + " shares available at $" + str(infos.price(context, h)) + " per share."
         buy_chain = inputs.buystock_chain_input(context)
         print "You have " + str(context['player'][context['cp']]['cash']) + " dollars."   
         buy_shares = inputs.buystock_amt_input(context, buy_chain, shares_bought)
