@@ -3,6 +3,7 @@ import turnaction
 import infos
 import inputs
 
+
 def placetile(context, x):
     '''Current player places a tile at location x, determines resulting chain effects'''
     '''This function only ends after all resulting actions have finished, and finishes by filling in the placed tile'''
@@ -66,7 +67,7 @@ def merger_at(context, x):
 
     # if one chain is largest, merge direction is set automatically
     else:
-        dom = find_key(n_chain_sizes, maxsize)
+        dom = infos.find_key(n_chain_sizes, maxsize)
         print dom + " dominates this merger."
 
     # Shareholders in chains getting eaten now get bonuses and choose what to do with their stock

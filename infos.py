@@ -3,6 +3,10 @@ import dataction
 import turnaction
 
 
+def find_key(dic, val):
+    """return the key of dictionary dic given the value"""
+    return [k for k, v in dic.iteritems() if v == val][0]
+
 def prev_let(a):
     return constants.letters[constants.letters.index(a)-1]
 

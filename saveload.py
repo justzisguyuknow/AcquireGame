@@ -8,12 +8,10 @@ def picklesave(context, name): #name must be a string
     gamefile.close()
 
 def pickleload(context, name): #name must be a string
-    '''loads the game file named name to context'''
+    '''loads the game file named to context'''
     gamefile = open(name, 'r')
     context = pickle.load(gamefile)
     gamefile.close()
-
-    turnaction.rungame(context)
 
 
 ##OLD SAVE AND LOAD FUNCTIONS:
