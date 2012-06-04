@@ -137,10 +137,7 @@ def networth(context, p):
 
 def find_holders(context, hotel):
     """Finds the shareholders of a hotel chain who win bonuses upon liquidation, returns a list of lists: [[Majority holders],[minority holders]]"""
-
-
     shareholders = []
-
     for p in context['player'].keys():
         if context['player'][p]['stock'][hotel] > 0:
             shareholders[p] = context['player'][p]['stock'][hotel]
@@ -151,8 +148,7 @@ def find_holders(context, hotel):
     max_held =  max(set(shareholders.values()))
 
     if len(shareholders.keys()) == 1: # Only one shareholder
-        return [[shareholders.keys()[0]], []]
-        
+        return [[shareholders.keys()[0]], []]  
     elif shareholders.values().count(max_held) > 1: #Tie for max shareholder
         tied_holders = []
         for p in shareholders.keys():
@@ -170,7 +166,6 @@ def find_holders(context, hotel):
         
         if minority_holders.values().count(max2_held) == 1:  #There is one winning minority shareholder
             return [[maj_holder],[minority_holders.keys()[0]]]
-
         else: #there is a tie for winning minority holder
             tied_holders = []
             for p in minority_holders.keys():

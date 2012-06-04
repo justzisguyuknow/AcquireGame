@@ -3,7 +3,9 @@ import turnaction
 import infos
 import inputs
 
-def placetile(context, x): #place tile x
+def placetile(context, x):
+    '''Current player places a tile at location x, determines resulting chain effects'''
+    '''This function only ends after all resulting actions have finished, and finishes by filling in the placed tile'''
 
     context['player'][context['cp']]['tilerack'].remove(x)
     #determine result:
@@ -125,7 +127,8 @@ def merger_at(context, x):
 
     context['grid'][x]['chain'] = dom #add merger tile to dominant chain            
 
-def sell_stock(context, p, chain): # shareholder chooses how much stock to sell upon being acquired
+def sell_stock(context, p, chain):
+    '''shareholder chooses how much stock to sell when a chain is liquidated'''
     print "Player "  + str(p) + ", you have " + str(context['player'][p]['stock'][chain]) + " shares of " + chain + " stock."
     print "Do you want to sell any stock for $" + str(infos.price(context, chain)) + " per share?"
 
@@ -144,7 +147,8 @@ def sell_stock(context, p, chain): # shareholder chooses how much stock to sell 
         print "Player " + str(p) + " does not sell any " + chain + " stock."
          
         
-def trade_stock(context, p, liquid, dom): ## shareholder chooses how many shares of liquid to exchange for shares of dom
+def trade_stock(context, p, liquid, dom):
+    '''shareholder chooses how many shares of liquidated chain to exchange for shares of acquiring chain, 2 for 1'''
     if context['stock'][dom] == 0:
         print "There are no shares of " + dom + " in the bank for which to exchange."
         return
@@ -171,26 +175,19 @@ def trade_stock(context, p, liquid, dom): ## shareholder chooses how many shares
             return        
     
 def buystock(context):
-    
+    '''Current player buys up to three shares of stock at the end of the turn''' 
     shares_bought = 0
-
     while 1 == 1:
         print "Available purchases are:"
-        
         for h in infos.avail_stock().keys():
             print h + ": " + str(infos.avail_stock()[h]) + " shares available at $" + str(infos.price(context, h)) + " per share."
-
         buy_chain = inputs.buystock_chain_input(context)
-
-        print "You have " + str(context['player'][context['cp']]['cash']) + " dollars."
-            
+        print "You have " + str(context['player'][context['cp']]['cash']) + " dollars."   
         buy_shares = inputs.buystock_amt_input(context, buy_chain, shares_bought)
-        
         context['player'][context['cp']]['cash'] -= (buy_shares * infos.price(context, buy_chain))
         context['player'][context['cp']]['stock'][buy_chain] += buy_shares
         context['stock'][buy_chain] -= buy_shares
         shares_bought += buy_shares
-
         if shares_bought > 2:
                 return
         else:
