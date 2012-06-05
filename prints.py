@@ -6,6 +6,7 @@ def summary(context):
     print_bank(context)
     print_players(context)
     print_hotels(context)
+    print_chain_leaders(context)
 
 def print_bank(context):
     print "BANK: STOCK REMAINING"
@@ -58,7 +59,32 @@ def print_grid(context):
     print ""
     
 def print_hotels(context):
-	print "HOTELS ON THE BOARD:"
-	for h in constants.hotels:
-		if infos.chainsize(context, h) > 1:
-			print h + ": size = " + str(infos.chainsize(context, h)) 
+    if len(infos.free_hotels(context)) == 7:
+        return
+    else:
+    	print "HOTELS ON THE BOARD:"
+    	for h in constants.hotels:
+    		if infos.chainsize(context, h) > 1:
+    			print h + ": size = " + str(infos.chainsize(context, h))
+
+def print_chain_leaders(context):
+    '''Prints each existing chain and its leading shareholders'''
+    if len(infos.free_hotels(context)) == 7:
+        return
+    else:
+        print "CHAIN LEADERS:"
+        for h in constants.hotels:
+            if context['stock'][h] < 25:
+                bonus_winners = infos.find_holders(context, h)
+                if bonus_winners == [[],[]]: #no shareholders at all
+                    print h + " has no shareholders!  Tragic!"
+                elif len(bonus_winners[0]) > 1: #tie for Majority
+                    print h + ": Players " + str(bonus_winners[0]) + "tie for majority shareholder with " + str(context['player'][bonus_winners[0][0]]['stock'][h]) + " shares each."
+                elif len(bonus_winners[0]) == 1 and bonus_winners[1] == []: #Only one shareholder
+                    print h + ": Player " + str(bonus_winners[0][0]) + " is the only shareholder, with " + str(context['player'][bonus_winners[0][0]]['stock'][h]) + " shares."
+                else: # One maj shareholder, one or more mins
+                    print h + ": Player " + str(bonus_winners[0][0]) + " is the Majority shareholder, with " + str(context['player'][bonus_winners[0][0]]['stock'][h]) + " shares."
+                    if len(bonus_winners[1]) == 1: # single winning minority holder
+                        print "   and Player " + str(bonus_winners[1][0]) + " is the highest minority shareholder with " + str(context['player'][bonus_winners[1][0]]['stock'][h]) + " shares."
+                    else: #tie for min bonus
+                        print "   and Players " + str(bonus_winners[1]) + " tie for minority shareholder with " + str(context['player'][bonus_winners[1][0]]['stock'][h]) + " shares each."

@@ -141,7 +141,7 @@ def networth(context, p):
 
 def find_holders(context, hotel):
     """Finds the shareholders of a hotel chain who win bonuses upon liquidation, returns a list of lists: [[Majority holders],[minority holders]]"""
-    shareholders = []
+    shareholders = {}
     for p in context['player'].keys():
         if context['player'][p]['stock'][hotel] > 0:
             shareholders[p] = context['player'][p]['stock'][hotel]

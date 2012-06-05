@@ -5,32 +5,25 @@ import infos
 import prints
 import inputs
 
-def start():
-    '''starts game with context (avoids need to pass context to startgame())'''
-    startgame(context)
-
-def run():
-    '''Passes context to rungame()'''
-    rungame(context)
-
 def startgame(context):
     '''Starts a game with full setup, runs turn() until game exits at endgame()'''
-
     context['numplayers'] = inputs.numplayers_ask(context)
-
     context['player'] = dict([x, {'tilerack':[ ], "cash":6000, "stock":dict([chain, 0] for chain in constants.hotels)}] for x in range(1,context['numplayers']+1))
 
-    for x in range(1, context['numplayers'] + 1): #give all players six random tiles
+    #give all players six random tiles, plus initial draw       
+    start_draws = {}
+    for p in context['player'].keys():
         for n in range(0, 6):
-            drawtile(context, x)
-
-    lowtile = min([infos.tup(context['tilepool'][n]) for n in range(1, context['numplayers']+1)])
-    context['cp'] = context['tilepool'].index(lowtile[0] + str(lowtile[1]))
-
-    for n in range(1, context['numplayers'] + 1):
-        print "Player " + str(n) + " draws " + context['tilepool'][n]
+            drawtile(context, p)
+        drawn = drawtile(context, p)
+        start_draws[p] = drawn
+        context['player'][p]['tilerack'].remove(drawn)
+        context['grid'][drawn]['filled'] = 1
+        print "Player " + str(p) + " draws " + drawn + "." 
     
-    print ""
+    #determine first player from initial draw
+    min_draw = min(start_draws.values())
+    context['cp'] = infos.find_key(start_draws, min_draw)
     print "Player " + str(context['cp']) + " starts the game "
     while 1==1:
         turn(context)

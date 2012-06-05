@@ -111,7 +111,7 @@ def merger_at(context, x):
                 sell_stock(context, bonus_winners[1][0], liquid)
                 trade_stock(context, bonus_winners[1][0], liquid, dom)
             
-            elif len(bonus_winners[1]) > 1: #tie for min bonus
+            else: #tie for min bonus
                 print "Players " + str(bonus_winners[1]) + " tie for minority shareholder in " + liquid + "."
                 split_bonus = infos.min_bonus(context, liquid)/len(bonus_winners[1])
                 print "Each receives an exit bonus of $" + str(split_bonus)
