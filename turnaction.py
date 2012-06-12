@@ -1,12 +1,14 @@
 import constants
-import context
+import cxt
 import dataction
 import infos
 import prints
 import inputs
 
 def startgame(context):
-    '''Starts a game with full setup, runs turn() until game exits at endgame()'''
+    '''Resets context, Starts a game with full setup, runs turn() until game exits at endgame()'''
+    del context
+    context = cxt.CXT
     context['numplayers'] = inputs.numplayers_ask(context)
     context['player'] = dict([x, {'tilerack':[ ], "cash":6000, "stock":dict([chain, 0] for chain in constants.hotels)}] for x in range(1,context['numplayers']+1))
 

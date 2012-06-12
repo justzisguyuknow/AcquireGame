@@ -4,41 +4,34 @@ import sys
 import pickle
 
 import constants
-import context
+import cxt
 import turnaction
 import dataction
 import infos
 import prints
 import inputs
 
-context = context.CXT
+cont = cxt.CXT
 
-def start(context):
-    '''Starts the game'''
-    turnaction.startgame(context)
+def start():
+    '''Resets context to game opening, and starts a new game'''
+    turnaction.startgame(cont)
 
-def run(context):
+def run():
     '''runs the game'''
-    turnaction.rungame(context)
+    global cont
+    turnaction.rungame(cont)
 
 def psave(context, name): #name must be a string 
     '''pickles the game context in named file'''
-    gamefile = open(name, 'w')
+    gamefile = open("psg"+name, 'w')
     pickle.dump(context, gamefile)
     gamefile.close()
 
 def pload(name): #name must be a string
-    global context
+    global cont
     '''unpickles context from named file'''
-    gamefile = open(name, 'r')
-    context = pickle.load(gamefile)
+    gamefile = open("psg"+name, 'r')
+    cont = pickle.load(gamefile)
     gamefile.close()
-    turnaction.rungame(context)
-
-def save(name): #name must be a string!
-	'''shortcut for calling saveload.picklesave(context, name)'''
-	psave(context, name)
-
-def load(name): #name must be a string!
-	'''shortcut for calling saveload.pickleload(context, name)'''
-	pload(name)
+    turnaction.rungame(cont)
