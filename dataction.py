@@ -33,18 +33,27 @@ def placetile(context, x):
         context['grid'][x]['filled'] = 1
 
 
+def adj_chain(context, tile, chain):
+    '''finds all filled tiles connected to tile and changes the chain value to chain (also changes initial tile's value)'''
+    
+    def crawl(context, tile, chain, changed_tiles):
+        for adj_tile in infos.filled_neighbors(context, tile):
+            if adj_tile not in changed_tiles:
+                context['grid'][adj_tile]['chain'] = chain
+                changed_tiles.append(adj_tile)
+                crawl(context, adj_tile, chain, changed_tiles)
+    
+    
+    crawl(context, tile, chain, [tile])
+    
+
 def newchain_at(context, x):
     """creates a new hotel chain with tile placed at x"""
     print "You have created a new chain."
     print "Available hotels are " + str(infos.free_hotels(context))
     new = inputs.newchain_input(context)
-    for tile in infos.filled_neighbors(context, x):
-        context['grid'][tile]['chain'] = new
-        for adj_tile in infos.filled_neighbors(context, tile):
-            if context['grid'][adj_tile]['chain'] == 0:
-                context['grid'][adj_tile]['chain'] = new
-
-    context['grid'][x]['chain'] = new
+    context['grid'][x]['chain'] = new 
+    adj_chain(context, x, new)
     context['player'][context['cp']]['stock'][new] = context['player'][context['cp']]['stock'][new] + 1
     context['stock'][new] = context['stock'][new]-1
     print "Player " + str(context['cp']) + " gets 1 free share of " + new + "."
