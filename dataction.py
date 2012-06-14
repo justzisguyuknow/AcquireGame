@@ -17,9 +17,9 @@ def placetile(context, x):
 
     # neighors all of chain x, or some chain x and some unaffiliated: grow chain x
     elif len(infos.neighbor_chains(context, x)) == 1:
-        context['grid'][x]['chain'] = infos.neighbor_chains(context, x)[0]
-        for f in infos.filled_neighbors(context, x):
-            context['grid'][f]['chain'] = infos.neighbor_chains(context, x)[0]
+        new = infos.neighbor_chains(context, x)[0]
+        context['grid'][x]['chain'] = new
+        adj_chain(context, x, new)
         context['grid'][x]['filled'] = 1
 
     # neighbor(s) that are all no chain: new chain
@@ -42,7 +42,6 @@ def adj_chain(context, tile, chain):
                 context['grid'][adj_tile]['chain'] = chain
                 changed_tiles.append(adj_tile)
                 crawl(context, adj_tile, chain, changed_tiles)
-    
     
     crawl(context, tile, chain, [tile])
     
@@ -137,8 +136,10 @@ def merger_at(context, x):
         for tile in context['grid'].keys():
             if context['grid'][tile]['chain'] == chain:
                 context['grid'][tile]['chain'] = dom
-
-    context['grid'][x]['chain'] = dom #add merger tile to dominant chain            
+    
+    context['grid'][x]['chain'] = dom #add merger tile to dominant chain 
+   
+    adj_chain(context, x, dom) #add any unafiliated tiles/chains to dominant chain as well       
 
 def sell_stock(context, p, chain):
     '''shareholder chooses how much stock to sell when a chain is liquidated'''
