@@ -22,13 +22,13 @@ def run():
     global cont
     turnaction.rungame(cont)
 
-def psave(context, name): #name must be a string 
+def save(name): #name must be a string 
     '''pickles the game context in named file'''
     gamefile = open("psg"+name, 'w')
-    pickle.dump(context, gamefile)
+    pickle.dump(cont, gamefile)
     gamefile.close()
 
-def pload(name): #name must be a string
+def load(name): #name must be a string
     global cont
     '''unpickles context from named file'''
     gamefile = open("psg"+name, 'r')
