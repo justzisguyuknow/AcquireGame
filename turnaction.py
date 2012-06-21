@@ -118,7 +118,6 @@ def bury_the_dead(context):
 
 def endgame(context):
     '''calls final_selloff(), calculates the final score, and ends the game'''
-    '''This function has a messy exit that needs to be improved.'''
 
     print "The game is over!"
     print "All chains are sold."
@@ -143,7 +142,10 @@ def endgame(context):
             winner = infos.find_key(scores, max_score)
             print ""
             print "Player " + str(winner) + " wins the game."
-    sys.exit()
+
+            print ""
+            print 'FIN.'
+    raise KeyboardInterrupt
 
 def final_selloff(context):
     '''Automatically liquidates (with no player input) all existing chains, and awards shareholder bonuses and stock sale earnings'''
