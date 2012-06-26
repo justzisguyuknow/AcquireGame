@@ -4,14 +4,14 @@ import sys
 import pickle
 
 import constants
-import cxt
+import stateclass
 import turnaction
 import dataction
 import infos
 import prints
 import inputs
 
-cont = cxt.CXT
+cont = stateclass.State()
 
 def start():
     '''Resets context to game opening, and starts a new game'''
@@ -23,15 +23,13 @@ def run():
     turnaction.rungame(cont)
 
 def save(name): #name must be a string 
-    '''pickles the game context in named file'''
-    gamefile = open("psg"+name, 'w')
-    pickle.dump(cont, gamefile)
-    gamefile.close()
+    cont.statesave(name)
 
 def load(name): #name must be a string
-    global cont
     '''unpickles context from named file'''
-    gamefile = open("psg"+name, 'r')
+    global cont
+    gamefile = open("psg"+ name, 'r')
     cont = pickle.load(gamefile)
     gamefile.close()
+    
     turnaction.rungame(cont)

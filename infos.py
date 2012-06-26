@@ -26,16 +26,16 @@ def strin(x, y):
 def filled_tiles(context): ##Apparently not called anywhere... good for checking during testing
     '''returns list of keys of all tiles placed on the board'''
     n = []
-    for t in context['grid'].keys():
-        if context['grid'][t]['filled'] == 1:
+    for t in context.grid.keys():
+        if context.grid[t]['filled'] == 1:
             n.append(t)
     return n
 
 def chainsize(context, x):
     '''returns the number of tiles with chain value x (string)'''
     c = 0
-    for t in context['grid']:
-	    if context['grid'][t]["chain"] == x:
+    for t in context.grid:
+	    if context.grid[t]["chain"] == x:
 		    c = c+1
     return c
 
@@ -78,8 +78,8 @@ def sole_bonus(context, name):
 def avail_stock(context):
     avail_stock = {}
     for h in constants.hotels:
-        if context['stock'][h] > 0 and chainsize(context, h) > 0:
-            avail_stock[h] = context['stock'][h]
+        if context.stock[h] > 0 and chainsize(context, h) > 0:
+            avail_stock[h] = context.stock[h]
 
     return avail_stock
 
@@ -100,14 +100,14 @@ def filled_neighbors(context, x):
     '''returns list of neighbors ids to x that are filled'''
     n = []
     for t in neighbors(context, x).values():
-        if context['grid'][t]['filled'] == 1:
+        if context.grid[t]['filled'] == 1:
             n.append(t)
         else: pass
     return n
 
 def neighbor_chains(context, x):
     '''returns the list of non-zero chain values of neighbor tiles'''
-    nlist = [context['grid'][n]['chain'] for n in neighbors(context, x).values()] #list neigbors' chain values
+    nlist = [context.grid[n]['chain'] for n in neighbors(context, x).values()] #list neigbors' chain values
     nlist = list(set(nlist)) #removes duplicates
     if nlist.count(0) > 0:
         nlist.remove(0) #removes zeros   
@@ -134,17 +134,17 @@ def deadtile(context, x):
 def networth(context, p):
     '''calculates a player p's net worth (not including potential final liquidation bonuses)'''
     stockworth = 0
-    for s in context['player'][p]['stock'].keys():
-            stockworth = stockworth + (price(context, s) * context['player'][p]['stock'][s])
-    worth = context['player'][p]['cash'] + stockworth
+    for s in context.player[p]['stock'].keys():
+            stockworth = stockworth + (price(context, s) * context.player[p]['stock'][s])
+    worth = context.player[p]['cash'] + stockworth
     return worth
 
 def find_holders(context, hotel):
     """Finds the shareholders of a hotel chain who win bonuses upon liquidation, returns a list of lists: [[Majority holders],[minority holders]]"""
     shareholders = {}
-    for p in context['player'].keys():
-        if context['player'][p]['stock'][hotel] > 0:
-            shareholders[p] = context['player'][p]['stock'][hotel]
+    for p in context.player.keys():
+        if context.player[p]['stock'][hotel] > 0:
+            shareholders[p] = context.player[p]['stock'][hotel]
     
     if len(shareholders.keys()) == 0: #No shareholders
         return [[],[]]
